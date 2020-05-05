@@ -7,15 +7,22 @@ class HashTableEntry:
         self.key = key
         self.value = value
         self.next = None
+        
 
 
 class HashTable:
     """
+    --MYHASH--
+
     A hash table that with `capacity` buckets
     that accepts string keys
 
     Implement this.
     """
+    def __init__(self, capacity):
+
+        self.capacity = capacity
+        self.storage = [None] * self.capacity
 
     def fnv1(self, key):
         """
@@ -23,13 +30,23 @@ class HashTable:
 
         Implement this, and/or DJB2.
         """
-
+        h = 14695981039346656037
+        for b in str(key).encode():
+            h *= 1099511628211
+            h ^= b
+        return h
     def djb2(self, key):
         """
         DJB2 32-bit hash function
 
         Implement this, and/or FNV-1.
         """
+        #hashes the string
+        hash = 5381
+        for x in key:
+            hash = (hash * 33) + ord(x)
+
+        return hash & 0xFFFFFFFF
 
     def hash_index(self, key):
         """
@@ -47,6 +64,8 @@ class HashTable:
 
         Implement this.
         """
+        index = self.hash_index(key)
+        self.storage[index] = HashTableEntry(key, value)
 
     def delete(self, key):
         """
@@ -56,6 +75,8 @@ class HashTable:
 
         Implement this.
         """
+        index = self.hash_index(key)
+        self.storage[index] = None
 
     def get(self, key):
         """
@@ -66,6 +87,11 @@ class HashTable:
         Implement this.
         """
 
+        index = self.hash_index(key)
+        if self.storage[index] == None:
+            return None
+        else:
+            return self.storage[index].value
     def resize(self):
         """
         Doubles the capacity of the hash table and
@@ -101,3 +127,5 @@ if __name__ == "__main__":
     print(ht.get("line_3"))
 
     print("")
+
+    print(HashTable.hash_index("hellohello"))
