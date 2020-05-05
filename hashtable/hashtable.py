@@ -64,8 +64,45 @@ class HashTable:
 
         Implement this.
         """
+        #hash index key is the index slot after being hashed
         index = self.hash_index(key)
-        self.storage[index] = HashTableEntry(key, value)
+        node = self.storage[index]
+        print(index, "Index")
+        if node is None:
+            
+            #print(node, "<------ is it None*************")
+            self.storage[index] = HashTableEntry(key, value)
+            print("Adding value (key, value) ", self.storage[index].key, self.storage[index].value)
+            return
+
+        prev = node
+        #Sets value to the index in storage
+
+        while node is not None and node.key != key:
+
+            prev = node
+            print(prev, "---- Prev")
+            node = node.next
+            print(node, "----- Next Node")
+
+        if prev.key == key:
+            prev.value = value
+        
+        else:
+            print(HashTableEntry(key,value), "New value added")
+            prev.next = HashTableEntry(key, value)
+            print(prev.next.key, prev.next.value)
+            
+
+            # if self.storage[index].next is None:
+            #     new = HashTableEntry(key,value)
+            #     self.storage[index].next = new
+            #     return(new, "Next Node", new.key, new.value)
+            
+            # self.storage[index] = self.storage[index].next
+        #self.storage[index] = HashTableEntry(key, value)
+        #print("Adding value (key, value) ", self.storage[index].key, self.storage[index].value)
+            #while
 
     def delete(self, key):
         """
@@ -78,6 +115,24 @@ class HashTable:
         index = self.hash_index(key)
         self.storage[index] = None
 
+        # if there exists data at this node
+        # loop through all nodes, until you get a key that matches or node is None
+        # prev = None
+        # while node is not None and node.key != key:
+        #     prev = node
+        #     node = node.next
+        # # if there is nothing, return warning
+        # if node is None:
+        #     return "Key is not found"
+        # # if key matches, delete the node entirely
+        # # if node.key == key:
+        # else:
+        #     if prev is None:
+        #         self.storage[index] = node.next
+        #         # node = node.next
+        #     else:
+        #         prev.next = node.next
+
     def get(self, key):
         """
         Retrieve the value stored with the given key.
@@ -88,10 +143,20 @@ class HashTable:
         """
 
         index = self.hash_index(key)
-        if self.storage[index] == None:
+        # if self.storage[index] == None:
+        #     return None
+        # else:
+        #     return self.storage[index].value
+
+        node = self.storage[index]
+
+        while node is not None and node.key != key:
+            node = node.next
+        
+        if node is None:
             return None
         else:
-            return self.storage[index].value
+            return node.value
     def resize(self):
         """
         Doubles the capacity of the hash table and
@@ -127,5 +192,26 @@ if __name__ == "__main__":
     print(ht.get("line_3"))
 
     print("")
+    print("My Test")
+    # ht2 = HashTable(5)
 
-    print(HashTable.hash_index("hellohello"))
+    # print(HashTable.hash_index(ht2, "taco"))
+    # print(HashTable.hash_index(ht2, "burger"))
+    # print(HashTable.hash_index(ht2, "chips22"))
+    # #print(HashTable.hash_index(ht2, "cat"))
+    # #print(HashTable.hash_index(ht2, "soda"))
+    # print(HashTable.hash_index(ht2, "cookies"))
+    # print(ht2, "--------- HT2")
+    # #(key, value)
+    # print(HashTable.put(ht2,"burger", 4), "--- put taco")
+    # print(HashTable.put(ht2,"cookies", 4))
+    # print(HashTable.put(ht2, "chips22", 4))
+    # #print(HashTable.put(ht2,"chips", 2))
+    # #print(HashTable.put(ht2,"cat", 0))
+    # print(HashTable.get(ht2, "burger"), "--- Get")
+    # print(HashTable.get(ht2, "cookies"), "--- Get")
+    # print(HashTable.get(ht2, "chips22"))
+    # print(ht2.storage[4].key, "----- Storage")
+    # print(ht2.storage[4].next.key)
+    # print(ht2.storage[4].next.next.key)
+    
